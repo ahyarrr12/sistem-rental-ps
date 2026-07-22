@@ -1,11 +1,11 @@
-import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
+import javax.swing.*;
 
 public class TambahPlayStationDialog extends JDialog {
 
-    private JTextField txtNamaKonsol;
-    private JTextField txtSeriKonsol;
+    private JComboBox<String> cmbNamaKonsol;
+    private JComboBox<String> cmbSeriKonsol;
     private JTextField txtHargaPerJam;
     private JTextField txtKeterangan;
 
@@ -93,8 +93,11 @@ public class TambahPlayStationDialog extends JDialog {
 
 
 
-        txtNamaKonsol = buatTextField();
-        txtSeriKonsol = buatTextField();
+        cmbNamaKonsol = new JComboBox<>(new String[]{"PlayStation"});
+        cmbNamaKonsol.setSelectedItem("PlayStation");
+
+        cmbSeriKonsol = new JComboBox<>(new String[]{"PS3", "PS4", "PS5"});
+
         txtHargaPerJam = buatTextField();
         txtKeterangan = buatTextField();
 
@@ -104,7 +107,6 @@ public class TambahPlayStationDialog extends JDialog {
 
         cmbStatus.addItem("Tersedia");
         cmbStatus.addItem("Dipinjam");
-        cmbStatus.addItem("Rusak");
 
 
 
@@ -123,7 +125,7 @@ public class TambahPlayStationDialog extends JDialog {
         g.weightx = 0.65;
 
         panelForm.add(
-            txtNamaKonsol,g
+            cmbNamaKonsol,g
         );
 
 
@@ -141,7 +143,7 @@ public class TambahPlayStationDialog extends JDialog {
         g.gridx = 1;
 
         panelForm.add(
-            txtSeriKonsol,g
+            cmbSeriKonsol,g
         );
 
 
@@ -269,7 +271,7 @@ public class TambahPlayStationDialog extends JDialog {
 
 
         SwingUtilities.invokeLater(
-            () -> txtNamaKonsol.requestFocus()
+            () -> cmbNamaKonsol.requestFocus()
         );
 
     }
@@ -341,11 +343,11 @@ public class TambahPlayStationDialog extends JDialog {
 
 
         String namaKonsol =
-            txtNamaKonsol.getText().trim();
+            cmbNamaKonsol.getSelectedItem().toString();
 
 
         String seriKonsol =
-            txtSeriKonsol.getText().trim();
+            cmbSeriKonsol.getSelectedItem().toString();
 
 
         String hargaStr =
