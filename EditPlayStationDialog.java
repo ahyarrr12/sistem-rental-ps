@@ -4,8 +4,8 @@ import javax.swing.*;
 
 public class EditPlayStationDialog extends JDialog {
 
-    private JTextField txtNamaKonsol, txtSeriKonsol, txtHargaPerJam, txtKeterangan;
-    private JComboBox<String> cmbStatus;
+    private JTextField txtHargaPerJam, txtKeterangan;
+    private JComboBox<String> cmbNamaKonsol, cmbSeriKonsol, cmbStatus;
     private JButton    btnSimpan, btnBatal;
     private boolean    disimpan = false;
 
@@ -47,8 +47,8 @@ public class EditPlayStationDialog extends JDialog {
         g.insets = new Insets(6, 4, 6, 4);
         g.anchor = GridBagConstraints.WEST;
 
-        txtNamaKonsol    = buatTextField();
-        txtSeriKonsol  = buatTextField();
+        cmbNamaKonsol  = new JComboBox<>(new String[]{"PlayStation"});
+        cmbSeriKonsol  = new JComboBox<>(new String[]{"PS3", "PS4", "PS5"});
         txtHargaPerJam     = buatTextField();
         txtKeterangan = buatTextField();
 
@@ -58,9 +58,9 @@ public class EditPlayStationDialog extends JDialog {
         cmbStatus.addItem("Disewa");
         cmbStatus.addItem("Maintenance");
 
-        String[]     labels = {"Nama Konsol *", "Seri Konsol *", "Harga Per Jam",
+        String[]    labels     = {"Nama Konsol *", "Seri Konsol *", "Harga Per Jam",
                                "Keterangan"};
-        JTextField[] fields = {txtNamaKonsol, txtSeriKonsol, txtHargaPerJam, txtKeterangan};
+        JComponent[] fields = {cmbNamaKonsol, cmbSeriKonsol, txtHargaPerJam, txtKeterangan};
 
         for (int i = 0; i < labels.length; i++) {
             g.gridx = 0; g.gridy = i; g.weightx = 0.35;
@@ -92,13 +92,13 @@ public class EditPlayStationDialog extends JDialog {
 
         btnSimpan.addActionListener(e -> aksiSimpan());
         btnBatal.addActionListener(e  -> dispose());
-        SwingUtilities.invokeLater(() -> txtNamaKonsol.requestFocus());
+        SwingUtilities.invokeLater(() -> cmbNamaKonsol.requestFocus());
     }
  
     /** Mengisi form dengan data playstation yang sudah ada */
 private void isiDataAwal() {
-    txtNamaKonsol.setText(playStationAsal.getNamaKonsol());
-    txtSeriKonsol.setText(playStationAsal.getSeriKonsol());
+    cmbNamaKonsol.setSelectedItem(playStationAsal.getNamaKonsol());
+    cmbSeriKonsol.setSelectedItem(playStationAsal.getSeriKonsol());
     txtHargaPerJam.setText(String.valueOf(playStationAsal.getHargaPerJam()));
     txtKeterangan.setText(playStationAsal.getKeterangan());
   
@@ -130,23 +130,11 @@ private void isiDataAwal() {
     // Validasi input, simpan perubahan ke DB, dan tutup dialog
     // ----------------------------------------------------------------
     private void aksiSimpan() {
-            String namaKonsol = txtNamaKonsol.getText().trim();
-            String seriKonsol = txtSeriKonsol.getText().trim();
+            String namaKonsol = cmbNamaKonsol.getSelectedItem().toString();
+            String seriKonsol = cmbSeriKonsol.getSelectedItem().toString();
             String hargaStr = txtHargaPerJam.getText().trim();
             String status = cmbStatus.getSelectedItem().toString();
-            String keterangan = txtKeterangan.getText().trim();        
-        
-            if (namaKonsol.isEmpty()) {
-            tampilPeringatan("Nama Konsol wajib diisi!");
-            txtNamaKonsol.requestFocus();
-            return;
-            }
-
-            if (seriKonsol.isEmpty()) {
-            tampilPeringatan("Seri Konsol wajib diisi!");
-            txtSeriKonsol.requestFocus();
-            return;
-            }
+            String keterangan = txtKeterangan.getText().trim();
 
             double hargaPerJam;
 
